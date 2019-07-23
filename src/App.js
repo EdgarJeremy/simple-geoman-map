@@ -10,7 +10,7 @@ class App extends React.Component {
     s_s: null
   }
   componentDidMount() {
-    this.geoman = new GeoMan('http://localhost', 8080, {
+    this.geoman = new GeoMan('http://36.67.90.80', 8080, {
       container: 'map',
       center: [124.842624, 1.4794296],
       zoom: 14,
