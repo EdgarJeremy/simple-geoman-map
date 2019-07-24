@@ -1,2 +1,0 @@
-@import url(https://fonts.googleapis.com/css?family=Lato&display=swap);*{font-family:Lato}#map{position:absolute;top:0;right:0;bottom:0;left:0}.control{position:fixed;top:10px;left:10px;background-color:hsla(0,0%,100%,.8);z-index:2;max-height:700px;overflow-x:hidden}.control ul{list-style-type:none;padding:0;margin:0}.control ul li{padding:10px 20px;cursor:pointer}.control ul li:not(:last-child){border-bottom:1px solid #ecf0f1}
-/*# sourceMappingURL=main.593f36d4.chunk.css.map */

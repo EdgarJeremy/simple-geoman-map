@@ -15,11 +15,24 @@
 .control {
   position: fixed;
   top: 10px;
-  left: 10px;
-  background-color: rgba(255,255,255,.8);
+  background-color: rgba(255,255,255,.9);
   z-index: 2;
   max-height: 700px;
   overflow-x: hidden;
+  border-radius: 10px;
+}
+.control-head {
+  font-size: 20px;
+  padding: 10px;
+  background-color: #03a9f4;
+  color: #ffffff;
+  text-align: center;
+}
+.control.region {
+  left: 10px;
+}
+.control.basemap {
+  right: 10px;
 }
 .control ul {
   list-style-type: none;
@@ -28,8 +41,47 @@
 }
 .control ul li {
   padding: 10px 20px;
-  cursor: pointer;
 }
 .control ul li:not(:last-child){
   border-bottom: 1px solid #ecf0f1;
+}
+.control ul li a {
+  color: #03a9f4;
+  text-decoration: none;
+}
+.control ul li a:hover {
+  text-decoration: underline;
+}
+
+.style-options {
+  z-index: 2;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  display: inline-block;
+}
+.style-options ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+}
+.style-options ul li {
+  background-color: #ffffff;
+  padding: 10px 20px;
+  display: inline-block;
+  color: #000000;
+  cursor: pointer;
+}
+.style-options ul li:first-child {
+  border-top-left-radius: 10px;
+}
+.style-options ul li:last-child {
+  border-top-right-radius: 10px;
+}
+.style-options ul li.active {
+  background-color: #03a9f4;
+  color: #ffffff;
 }
