@@ -21,7 +21,7 @@ class App extends React.Component {
       container: 'map',
       center: [124.842624, 1.4794296],
       zoom: 14,
-      pitch: 90
+      maxZoom: 17
     }, this.state.active_style);
     this.geoman.setReadyCallback(() => {
       this.geoman.getDistricts().then((districts) => this.setState({ districts }));
