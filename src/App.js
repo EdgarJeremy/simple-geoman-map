@@ -1,5 +1,6 @@
 import React from 'react';
 import GeoMan from 'geoman-client';
+import numeral from 'numeral';
 
 class App extends React.Component {
   state = {
@@ -20,8 +21,7 @@ class App extends React.Component {
     this.geoman = new GeoMan(host, port, {
       container: 'map',
       center: [124.842624, 1.4794296],
-      zoom: 14,
-      maxZoom: 17
+      zoom: 14
     }, this.state.active_style);
     this.geoman.setReadyCallback(() => {
       this.geoman.getDistricts().then((districts) => this.setState({ districts }));
@@ -55,7 +55,7 @@ class App extends React.Component {
       this.info.style.left = `${ev.originalEvent.clientX}px`;
       this.info.innerHTML = `
         <b>Wilayah</b> : ${feature.properties.name}<br />
-        <b>Luas</b> : ${Math.round(area * 100) / 100} m²
+        <b>Luas</b> : ${numeral(area).format('0,0')} m²
       `;
     });
     this.geoman.setRegionLabelEvent('mouseleave', 'district', () => {
@@ -76,7 +76,7 @@ class App extends React.Component {
       this.info.style.left = `${ev.originalEvent.clientX}px`;
       this.info.innerHTML = `
         <b>Wilayah</b> : ${feature.properties.name} - ${feature.properties.district}<br />
-        <b>Luas</b> : ${Math.round(area * 100) / 100} m²
+        <b>Luas</b> : ${numeral(area).format('0,0')} m²
       `;
     });
     this.geoman.setRegionLabelEvent('mouseleave', 'subdistrict', () => {
@@ -97,7 +97,7 @@ class App extends React.Component {
       this.info.style.left = `${ev.originalEvent.clientX}px`;
       this.info.innerHTML = `
         <b>Wilayah</b> : ${feature.properties.name} - ${feature.properties.subdistrict} - ${feature.properties.district}<br />
-        <b>Luas</b> : ${Math.round(area * 100) / 100} m²
+        <b>Luas</b> : ${numeral(area).format('0,0')} m²
       `;
     });
     this.geoman.setRegionLabelEvent('mouseleave', 'neighbor', () => {
