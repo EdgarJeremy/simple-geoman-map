@@ -1,5 +1,6 @@
 import React from 'react';
 import GeoMan from 'geoman-client';
+import convert from 'convert-units';
 
 class App extends React.Component {
   state = {
@@ -26,9 +27,9 @@ class App extends React.Component {
     this.geoman.setReadyCallback(() => {
       this.geoman.getDistricts().then((districts) => this.setState({ districts }));
       this.geoman.getBasemaps().then((basemaps) => this.setState({ basemaps }));
-      this.setDistrictLabelClick();
-      this.setSubdistrictLabelClick();
-      this.setNeighborLabelClick();
+      this.setDistrictLabelEvent();
+      this.setSubdistrictLabelEvent();
+      this.setNeighborLabelEvent();
     });
   }
   fetchSubdistrict(d) {
@@ -41,28 +42,67 @@ class App extends React.Component {
       s.getNeighbors().then((neighbors) => this.setState({ neighbors }));
     });
   }
-  setDistrictLabelClick() {
+  setDistrictLabelEvent() {
     this.geoman.setRegionLabelEvent('click', 'district', (feature) => {
       this.setCursorLoading(true);
       this.geoman.getDistrict(feature.properties.id).then((district) => {
         district.focus().then(() => this.setCursorLoading(false));
       });
     });
+    this.geoman.setRegionLabelEvent('mousemove', 'district', (feature, ev) => {
+      const area = feature.properties.area;
+      this.info.style.display = 'block';
+      this.info.style.top = `${ev.originalEvent.clientY - 60}px`;
+      this.info.style.left = `${ev.originalEvent.clientX}px`;
+      this.info.innerHTML = `
+        <b>Wilayah</b> : ${feature.properties.name}<br />
+        <b>Luas</b> : ${Math.round(area * 100) / 100} m²
+      `;
+    });
+    this.geoman.setRegionLabelEvent('mouseleave', 'district', () => {
+      this.info.style.display = 'none';
+    });
   }
-  setSubdistrictLabelClick() {
+  setSubdistrictLabelEvent() {
     this.geoman.setRegionLabelEvent('click', 'subdistrict', (feature) => {
       this.setCursorLoading(true);
       this.geoman.getSubdistrict(feature.properties.district_id, feature.properties.id).then((subdistrict) => {
         subdistrict.focus().then(() => this.setCursorLoading(false));
       });
     });
+    this.geoman.setRegionLabelEvent('mousemove', 'subdistrict', (feature, ev) => {
+      const area = feature.properties.area;
+      this.info.style.display = 'block';
+      this.info.style.top = `${ev.originalEvent.clientY - 60}px`;
+      this.info.style.left = `${ev.originalEvent.clientX}px`;
+      this.info.innerHTML = `
+        <b>Wilayah</b> : ${feature.properties.name} - ${feature.properties.district}<br />
+        <b>Luas</b> : ${Math.round(area * 100) / 100} m²
+      `;
+    });
+    this.geoman.setRegionLabelEvent('mouseleave', 'subdistrict', () => {
+      this.info.style.display = 'none';
+    });
   }
-  setNeighborLabelClick() {
+  setNeighborLabelEvent() {
     this.geoman.setRegionLabelEvent('click', 'neighbor', (feature) => {
       this.setCursorLoading(true);
       this.geoman.getNeighbor(feature.properties.district_id, feature.properties.subdistrict_id, feature.properties.id).then((neighbor) => {
         neighbor.focus().then(() => this.setCursorLoading(false));
       });
+    });
+    this.geoman.setRegionLabelEvent('mousemove', 'neighbor', (feature, ev) => {
+      const area = feature.properties.area;
+      this.info.style.display = 'block';
+      this.info.style.top = `${ev.originalEvent.clientY - 60}px`;
+      this.info.style.left = `${ev.originalEvent.clientX}px`;
+      this.info.innerHTML = `
+        <b>Wilayah</b> : ${feature.properties.name} - ${feature.properties.subdistrict} - ${feature.properties.district}<br />
+        <b>Luas</b> : ${Math.round(area * 100) / 100} m²
+      `;
+    });
+    this.geoman.setRegionLabelEvent('mouseleave', 'neighbor', () => {
+      this.info.style.display = 'none';
     });
   }
   setCursorLoading(status) {
@@ -74,6 +114,9 @@ class App extends React.Component {
     const { districts, subdistricts, neighbors, basemaps } = this.state;
     return (
       <div className="App">
+        <div id="info-popover" ref={(e) => this.info = e}>
+          lorem ipsum
+        </div>
         <div id="loading" className={this.state.loading ? 'show' : ''}>
           <i className="fa fa-cog fa-spin"></i>
         </div>
