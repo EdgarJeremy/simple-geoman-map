@@ -78,9 +78,11 @@
   list-style-type: none;
   padding: 0;
   margin: 0;
+  font-size: 13px;
+}
+.control ul.parent-list {
   max-height: 300px;
   overflow-x: hidden;
-  font-size: 13px;
 }
 .control ul li {
   padding: 10px 20px;

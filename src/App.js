@@ -85,7 +85,7 @@ class App extends React.Component {
           <div className="control-head">
             Wilayah
           </div>
-          <ul>
+          <ul className="parent-list">
             {districts.map((d, i) => (
               <li key={i}>
                 {d.name} [<a href="#" onClick={() => {
@@ -97,7 +97,10 @@ class App extends React.Component {
                       s_d: d.id,
                     }, () => this.fetchSubdistrict(d));
                   }
-                }}>{this.state.s_d === d.id ? 'collapse' : 'expand'}</a>] [<a href="#" onClick={() => d.focus()}>focus</a>]
+                }}>{this.state.s_d === d.id ? 'collapse' : 'expand'}</a>] [<a href="#" onClick={() => {
+                  this.setCursorLoading(true);
+                  d.focus().then(() => this.setCursorLoading(false));
+                }}>focus</a>]
                   <ul>
                   {this.state.s_d === d.id && subdistricts.map((s, j) => (
                     <li key={j}>
@@ -110,10 +113,16 @@ class App extends React.Component {
                             s_s: s.id,
                           }, () => this.fetchNeighbors(s));
                         }
-                      }}>{this.state.s_s === s.id ? 'collapse' : 'expand'}</a>] [<a href="#" onClick={() => s.focus()}>focus</a>]
+                      }}>{this.state.s_s === s.id ? 'collapse' : 'expand'}</a>] [<a href="#" onClick={() => {
+                        this.setCursorLoading(true);
+                        s.focus().then(() => this.setCursorLoading(false));
+                      }}>focus</a>]
                         <ul>
                         {this.state.s_s === s.id && neighbors.map((n, k) => (
-                          <li key={k}>{n.name} [<a href="#" onClick={() => n.focus()}>focus</a>]</li>
+                          <li key={k}>{n.name} [<a href="#" onClick={() => {
+                            this.setCursorLoading(true);
+                            n.focus().then(() => this.setCursorLoading(false));
+                          }}>focus</a>]</li>
                         ))}
                       </ul>
                     </li>
@@ -125,7 +134,7 @@ class App extends React.Component {
           <div className="control-head">
             Basemap
           </div>
-          <ul>
+          <ul className="parent-list">
             {basemaps.map((b, i) => (
               <li key={i}>{b.name} [<a onClick={() => {
                 const { active_basemaps } = this.state;
