@@ -131,6 +131,9 @@ class App extends React.Component {
             {districts.map((d, i) => (
               <li key={i}>
                 {d.name} [<a href="#" onClick={() => {
+                  this.setCursorLoading(true);
+                  d.focus().then(() => this.setCursorLoading(false));
+                }}>focus</a>] [<a href="#" onClick={() => {
                   const { s_d } = this.state;
                   if (s_d === d.id) {
                     this.setState({ s_d: null });
@@ -139,14 +142,14 @@ class App extends React.Component {
                       s_d: d.id,
                     }, () => this.fetchSubdistrict(d));
                   }
-                }}>{this.state.s_d === d.id ? 'collapse' : 'expand'}</a>] [<a href="#" onClick={() => {
-                  this.setCursorLoading(true);
-                  d.focus().then(() => this.setCursorLoading(false));
-                }}>focus</a>]
+                }}>{this.state.s_d === d.id ? 'collapse' : 'expand'}</a>]
                   <ul>
                   {this.state.s_d === d.id && subdistricts.map((s, j) => (
                     <li key={j}>
                       {s.name} [<a href="#" onClick={() => {
+                        this.setCursorLoading(true);
+                        s.focus().then(() => this.setCursorLoading(false));
+                      }}>focus</a>] [<a href="#" onClick={() => {
                         const { s_s } = this.state;
                         if (s_s === s.id) {
                           this.setState({ s_s: null });
@@ -155,10 +158,7 @@ class App extends React.Component {
                             s_s: s.id,
                           }, () => this.fetchNeighbors(s));
                         }
-                      }}>{this.state.s_s === s.id ? 'collapse' : 'expand'}</a>] [<a href="#" onClick={() => {
-                        this.setCursorLoading(true);
-                        s.focus().then(() => this.setCursorLoading(false));
-                      }}>focus</a>]
+                      }}>{this.state.s_s === s.id ? 'collapse' : 'expand'}</a>] 
                         <ul>
                         {this.state.s_s === s.id && neighbors.map((n, k) => (
                           <li key={k}>{n.name} [<a href="#" onClick={() => {
