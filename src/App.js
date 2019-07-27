@@ -1,6 +1,5 @@
 import React from 'react';
 import GeoMan from 'geoman-client';
-import convert from 'convert-units';
 
 class App extends React.Component {
   state = {
