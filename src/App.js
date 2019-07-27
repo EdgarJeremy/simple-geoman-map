@@ -8,19 +8,25 @@ class App extends React.Component {
     neighbors: [],
     basemaps: [],
     active_basemaps: [],
-    active_style: GeoMan.Styles.WORLD,
+    active_style: GeoMan.Styles.DARK,
     s_d: null,
-    s_s: null
+    s_s: null,
+    regionPanel: false,
+    loading: false
   }
   componentDidMount() {
-    this.geoman = new GeoMan('http://10.71.71.71', 8080, {
+    this.geoman = new GeoMan('http://localhost', 8080, {
       container: 'map',
       center: [124.842624, 1.4794296],
       zoom: 14,
+      pitch: 90
     }, this.state.active_style);
     this.geoman.setReadyCallback(() => {
       this.geoman.getDistricts().then((districts) => this.setState({ districts }));
       this.geoman.getBasemaps().then((basemaps) => this.setState({ basemaps }));
+      this.setDistrictLabelClick();
+      this.setSubdistrictLabelClick();
+      this.setNeighborLabelClick();
     });
   }
   fetchSubdistrict(d) {
@@ -33,12 +39,47 @@ class App extends React.Component {
       s.getNeighbors().then((neighbors) => this.setState({ neighbors }));
     });
   }
+  setDistrictLabelClick() {
+    this.geoman.setRegionLabelEvent('click', 'district', (feature) => {
+      this.setCursorLoading(true);
+      this.geoman.getDistrict(feature.properties.id).then((district) => {
+        district.focus().then(() => this.setCursorLoading(false));
+      });
+    });
+  }
+  setSubdistrictLabelClick() {
+    this.geoman.setRegionLabelEvent('click', 'subdistrict', (feature) => {
+      this.setCursorLoading(true);
+      this.geoman.getSubdistrict(feature.properties.district_id, feature.properties.id).then((subdistrict) => {
+        subdistrict.focus().then(() => this.setCursorLoading(false));
+      });
+    });
+  }
+  setNeighborLabelClick() {
+    this.geoman.setRegionLabelEvent('click', 'neighbor', (feature) => {
+      this.setCursorLoading(true);
+      this.geoman.getNeighbor(feature.properties.district_id, feature.properties.subdistrict_id, feature.properties.id).then((neighbor) => {
+        neighbor.focus().then(() => this.setCursorLoading(false));
+      });
+    });
+  }
+  setCursorLoading(status) {
+    this.setState({
+      loading: status
+    });
+  }
   render() {
     const { districts, subdistricts, neighbors, basemaps } = this.state;
     return (
       <div className="App">
+        <div id="loading" className={this.state.loading ? 'show' : ''}>
+          <i className="fa fa-cog fa-spin"></i>
+        </div>
         <div id="map"></div>
-        <div className="control region">
+        <div className="main-header">
+          <img src={require('./images/logo-pemkot_rev.png')} width="60%" />
+        </div>
+        <div className={`control region ${this.state.regionPanel ? 'show' : ''}`}>
           <div className="control-head">
             Wilayah
           </div>
@@ -79,8 +120,6 @@ class App extends React.Component {
               </li>
             ))}
           </ul>
-        </div>
-        <div className="control basemap">
           <div className="control-head">
             Basemap
           </div>
@@ -99,12 +138,13 @@ class App extends React.Component {
               }} href="#">{this.state.active_basemaps.indexOf(b.id) !== -1 ? 'hide' : 'show'}</a>]</li>
             ))}
           </ul>
+          <div className="control-toggle" onClick={() => this.setState({ regionPanel: !this.state.regionPanel })}>Wilayah & Basemap</div>
         </div>
         <div className="style-options">
           <ul>
             {Object.keys(GeoMan.Styles).map((s, i) => (
               <li className={this.state.active_style === s ? 'active' : ''} key={i} onClick={() => {
-                this.setState({ active_style: s });
+                this.setState({ active_style: s, active_basemaps: [] });
                 this.geoman.setStyle(s);
               }}>{s}</li>
             ))}

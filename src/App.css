@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Lato&display=swap");
 
 * {
-  font-family: 'Lato';
+  font-family: "Lato";
 }
 
 #map {
@@ -12,14 +12,40 @@
   left: 0;
 }
 
+.main-header {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+}
+#loading {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+  color: #ffffff;
+  font-size: 60px;
+  background-color: rgba(0,0,0,.8);
+  text-align: center;
+  display: none;
+}
+#loading i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+#loading.show {
+  display: block;
+}
 .control {
   position: fixed;
   top: 10px;
-  background-color: rgba(255,255,255,.9);
+  background-color: rgba(255, 255, 255, 0.9);
   z-index: 2;
-  max-height: 700px;
-  overflow-x: hidden;
-  border-radius: 10px;
+  transition: .5s ease;
 }
 .control-head {
   font-size: 20px;
@@ -29,20 +55,37 @@
   text-align: center;
 }
 .control.region {
-  left: 10px;
+  top: 100px;
+  left: -300px;
+  width: 300px;
 }
-.control.basemap {
-  right: 10px;
+.control.region.show {
+  left: 0;
+}
+.control .control-toggle {
+  position: absolute;
+  right: -194px;
+  top: 0;
+  padding: 10px;
+  background-color: #E91E63;
+  font-size: 20px;
+  color: white;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  cursor: pointer;
 }
 .control ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
+  max-height: 300px;
+  overflow-x: hidden;
+  font-size: 13px;
 }
 .control ul li {
   padding: 10px 20px;
 }
-.control ul li:not(:last-child){
+.control ul li:not(:last-child) {
   border-bottom: 1px solid #ecf0f1;
 }
 .control ul li a {
@@ -74,12 +117,6 @@
   display: inline-block;
   color: #000000;
   cursor: pointer;
-}
-.style-options ul li:first-child {
-  border-top-left-radius: 10px;
-}
-.style-options ul li:last-child {
-  border-top-right-radius: 10px;
 }
 .style-options ul li.active {
   background-color: #03a9f4;
