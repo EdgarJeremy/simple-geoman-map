@@ -15,7 +15,9 @@ class App extends React.Component {
     loading: false
   }
   componentDidMount() {
-    this.geoman = new GeoMan('http://localhost', 8080, {
+    const host = process.env.REACT_APP_MAP_HOST ? process.env.REACT_APP_MAP_HOST : 'http://localhost';
+    const port = process.env.REACT_APP_MAP_PORT ? process.env.REACT_APP_MAP_PORT : 8080;
+    this.geoman = new GeoMan(host, port, {
       container: 'map',
       center: [124.842624, 1.4794296],
       zoom: 14,
