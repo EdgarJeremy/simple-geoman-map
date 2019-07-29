@@ -6,9 +6,11 @@
     "convert-units": "^2.3.4",
     "geoman-client": "0.0.16",
     "numeral": "^2.0.6",
+    "pdfmake": "^0.1.58",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "save-as": "^0.1.8"
   },
   "scripts": {
     "start": "react-scripts start",

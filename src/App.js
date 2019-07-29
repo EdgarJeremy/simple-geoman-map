@@ -1,6 +1,10 @@
 import React from 'react';
 import GeoMan from 'geoman-client';
 import numeral from 'numeral';
+import saveAs from 'save-as';
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 class App extends React.Component {
   state = {
@@ -21,7 +25,8 @@ class App extends React.Component {
     this.geoman = new GeoMan(host, port, {
       container: 'map',
       center: [124.842624, 1.4794296],
-      zoom: 14
+      zoom: 14,
+      preserveDrawingBuffer: true
     }, this.state.active_style);
     this.geoman.setReadyCallback(() => {
       this.geoman.getDistricts().then((districts) => this.setState({ districts }));
@@ -109,15 +114,30 @@ class App extends React.Component {
       loading: status
     });
   }
+  onExport() {
+    const ctx = this.geoman.map.getCanvas();
+    pdfMake.createPdf({
+      pageOrientation: 'landscape',
+      pageSize: {
+        width: ctx.width,
+        height: ctx.height
+      },
+      pageMargins: [0,0],
+      content: [{
+        image: ctx.toDataURL()
+      }]
+    }).download(`Map Export - ${new Date().toDateString()}.pdf`);
+  }
   render() {
     const { districts, subdistricts, neighbors, basemaps } = this.state;
     return (
       <div className="App">
-        <div id="info-popover" ref={(e) => this.info = e}>
-          lorem ipsum
-        </div>
+        <div id="info-popover" ref={(e) => this.info = e}></div>
         <div id="loading" className={this.state.loading ? 'show' : ''}>
           <i className="fa fa-cog fa-spin"></i>
+        </div>
+        <div id="actions" onClick={this.onExport.bind(this)}>
+          <i className="fa fa-download"></i> Eksport
         </div>
         <div id="map"></div>
         <div className="main-header">
@@ -158,7 +178,7 @@ class App extends React.Component {
                             s_s: s.id,
                           }, () => this.fetchNeighbors(s));
                         }
-                      }}>{this.state.s_s === s.id ? 'collapse' : 'expand'}</a>] 
+                      }}>{this.state.s_s === s.id ? 'collapse' : 'expand'}</a>]
                         <ul>
                         {this.state.s_s === s.id && neighbors.map((n, k) => (
                           <li key={k}>{n.name} [<a href="#" onClick={() => {
