@@ -122,7 +122,7 @@ class App extends React.Component {
         width: ctx.width,
         height: ctx.height
       },
-      pageMargins: [0,0],
+      pageMargins: [0, 0],
       content: [{
         image: ctx.toDataURL()
       }]
@@ -198,17 +198,23 @@ class App extends React.Component {
           </div>
           <ul className="parent-list">
             {basemaps.map((b, i) => (
-              <li key={i}>{b.name} [<a onClick={() => {
-                const { active_basemaps } = this.state;
-                if (active_basemaps.indexOf(b.id) !== -1) {
-                  b.hide();
-                  active_basemaps.splice(active_basemaps.indexOf(b.id), 1);
-                } else {
-                  b.show();
-                  active_basemaps.push(b.id);
-                }
-                this.setState({ active_basemaps });
-              }} href="#">{this.state.active_basemaps.indexOf(b.id) !== -1 ? 'hide' : 'show'}</a>]</li>
+              <li key={i}>
+                {b.name} [<a onClick={() => {
+                  const { active_basemaps } = this.state;
+                  if (active_basemaps.indexOf(b.id) !== -1) {
+                    b.hide();
+                    active_basemaps.splice(active_basemaps.indexOf(b.id), 1);
+                  } else {
+                    b.show();
+                    active_basemaps.push(b.id);
+                  }
+                  this.setState({ active_basemaps });
+                }} href="#">
+                  {this.state.active_basemaps.indexOf(b.id) !== -1 ? 'hide' : 'show'}</a>]
+                  <input type="range" min="0" max="100" defaultValue="100" className="slider" disabled={this.state.active_basemaps.indexOf(b.id) === -1} onChange={(e) => {
+                    b.setOpacity(e.target.value / 100);
+                  }} />
+              </li>
             ))}
           </ul>
           <div className="control-toggle" onClick={() => this.setState({ regionPanel: !this.state.regionPanel })}>Wilayah & Basemap</div>
