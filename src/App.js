@@ -1,7 +1,6 @@
 import React from 'react';
 import GeoMan from 'geoman-client';
 import numeral from 'numeral';
-import saveAs from 'save-as';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -13,11 +12,16 @@ class App extends React.Component {
     neighbors: [],
     basemaps: [],
     active_basemaps: [],
-    active_style: GeoMan.Styles.DARK,
+    active_style: GeoMan.Styles.WORLD,
     s_d: null,
     s_s: null,
     regionPanel: false,
-    loading: false
+    loading: false,
+    detail: {
+      name: '',
+      type: '',
+      children: []
+    }
   }
   componentDidMount() {
     const host = process.env.REACT_APP_MAP_HOST ? process.env.REACT_APP_MAP_HOST : 'http://localhost';
@@ -48,9 +52,20 @@ class App extends React.Component {
   }
   setDistrictLabelEvent() {
     this.geoman.setRegionLabelEvent('click', 'district', (feature) => {
+      console.log(feature);
       this.setCursorLoading(true);
       this.geoman.getDistrict(feature.properties.id).then((district) => {
-        district.focus().then(() => this.setCursorLoading(false));
+        district.getSubdistricts().then((subdistricts) => {
+          this.setState({
+            detail: {
+              name: `Kecamatan ${feature.properties.name}`,
+              type: 'district',
+              children: subdistricts
+            }
+          }, () => {
+            district.focus().then(() => this.setCursorLoading(false));
+          });
+        });
       });
     });
     this.geoman.setRegionLabelEvent('mousemove', 'district', (feature, ev) => {
@@ -136,6 +151,20 @@ class App extends React.Component {
         <div id="loading" className={this.state.loading ? 'show' : ''}>
           <i className="fa fa-cog fa-spin"></i>
         </div>
+        {/* <div id="region-detail">
+          <div className="detail-header"><h3>Kecamatan A</h3></div>
+          <div className="detail-body">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Luas</th>
+                  <th>Fokus</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </div> */}
         <div id="actions" onClick={this.onExport.bind(this)}>
           <i className="fa fa-download"></i> Eksport
         </div>
@@ -148,6 +177,7 @@ class App extends React.Component {
             Wilayah
           </div>
           <ul className="parent-list">
+            <button className="outfocus" onClick={() => this.geoman.clearFocuses()}>OUTFOCUS</button>
             {districts.map((d, i) => (
               <li key={i}>
                 {d.name} [<a href="#" onClick={() => {
@@ -212,8 +242,8 @@ class App extends React.Component {
                 }} href="#">
                   {this.state.active_basemaps.indexOf(b.id) !== -1 ? 'hide' : 'show'}</a>]
                   <input type="range" min="0" max="100" defaultValue="100" className="slider" disabled={this.state.active_basemaps.indexOf(b.id) === -1} onChange={(e) => {
-                    b.setOpacity(e.target.value / 100);
-                  }} />
+                  b.setOpacity(e.target.value / 100);
+                }} />
               </li>
             ))}
           </ul>

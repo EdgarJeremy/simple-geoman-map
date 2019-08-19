@@ -67,6 +67,50 @@
 #loading.show {
   display: block;
 }
+.outfocus {
+  display: block;
+  width: 100%;
+  background-color: #f6e58d;
+  border: 0;
+  outline: 0;
+  margin: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+#region-detail {
+  position: fixed;
+  right: 10px;
+  top: 100px;
+  background-color: rgba(255,255,255,0.9);
+  z-index: 1;
+}
+#region-detail .detail-header {
+  padding: 10px;
+}
+#region-detail .detail-header h3 {
+  margin: 0; padding: 0;
+}
+#region-detail .detail-body {
+  padding: 10px;
+}
+#region-detail .detail-body table {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+#region-detail .detail-body table td, #region-detail .detail-body table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+#region-detail .detail-body table tr:nth-child(even){background-color: #f2f2f2;}
+#region-detail .detail-body table tr:hover {background-color: #ddd;}
+#region-detail .detail-body table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
 .control {
   position: fixed;
   top: 10px;
