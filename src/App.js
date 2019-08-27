@@ -177,7 +177,7 @@ class App extends React.Component {
             Wilayah
           </div>
           <ul className="parent-list">
-            <button className="outfocus" onClick={() => this.geoman.clearFocuses()}>OUTFOCUS</button>
+            <button className="outfocus" onClick={() => this.geoman.clearFocuses()}>MANADO</button>
             {districts.map((d, i) => (
               <li key={i}>
                 {d.name} [<a href="#" onClick={() => {
