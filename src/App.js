@@ -178,6 +178,13 @@ class App extends React.Component {
           </div>
           <ul className="parent-list">
             <button className="outfocus" onClick={() => this.geoman.clearFocuses()}>MANADO</button>
+            <div style={{textAlign: 'center'}}>
+              Label Wilayah<input type="checkbox" defaultChecked={true} onClick={(e) => {
+                this.geoman.map.setLayoutProperty('tc-basemap-layer-district-label', 'visibility', e.target.checked ? 'visible' : 'none');
+                this.geoman.map.setLayoutProperty('tc-basemap-layer-subdistrict-label', 'visibility', e.target.checked ? 'visible' : 'none');
+                this.geoman.map.setLayoutProperty('tc-basemap-layer-neighbor-label', 'visibility', e.target.checked ? 'visible' : 'none');
+              }}/>
+            </div>
             {districts.map((d, i) => (
               <li key={i}>
                 {d.name} [<a href="#" onClick={() => {
